@@ -127,12 +127,20 @@ public class TypeDocumentation
   public void Save(StringBuilder data)
   {
     data.AppendLine($"# {Name}\n");
+    data.AppendLine("## Navigation");
+    data.AppendLine($"- [Index ↰](../Index.html)\n");
+    data.AppendLine($"- [Member Info](#member-info)");
+    data.AppendLine($"- [Fields](#fields)");
+    data.AppendLine($"- [Properties](#properties)");
+    data.AppendLine($"- [Methods](#methods)");
+
+    data.AppendLine("## Member Info");
     data.AppendLine($"- **Namespace**: {Namespace}");
     data.AppendLine($"- **FullName**: {FullName}");
     data.AppendLine($"- **Summary**: {TypeSummary}");
 
     if (NestedIn is not null)
-      data.AppendLine($"- **Nested In**: [{Strategy.GetEscapedDisplayOnlyName(NestedIn.Name)}]({NestedIn.FullName}.html)");
+      data.AppendLine($"- **Nested In**: [{Strategy.GetEscapedDisplayOnlyName(NestedIn.Name)} ↩]({NestedIn.FullName}.html)");
 
     if (Parent is not null)
       data.AppendLine($"- **Parent**: {Strategy.GetEscapedDisplayOnlyName(Parent.Name)}");
