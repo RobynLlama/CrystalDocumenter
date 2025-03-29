@@ -22,7 +22,7 @@ public static partial class Utils
     }
     else
     {
-      // Fallback for other cases like anonymous types
+      //Fallback for other cases like anonymous types
       input = thisType.Name;
       if (thisType.DeclaringType is not null)
       {

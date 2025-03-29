@@ -40,7 +40,7 @@ public class MethodDocumentation
 
   public MethodDocumentation(MethodInfo method)
   {
-    MethodName = method.Name;
+    MethodName = Strategy.DefaultNamingStrategy(method);
     Accessibility = Utils.GetAccessibility(method);
     MethodSummary = "No Summary";
     IsStatic = method.IsStatic;

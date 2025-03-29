@@ -42,7 +42,7 @@ public class FieldDocumentation
   {
     Accessibility = Utils.GetAccessibility(field);
     IsStatic = field.IsStatic;
-    FieldName = field.Name ?? "Unknown";
+    FieldName = Strategy.DefaultNamingStrategy(field);
     FieldType = field.FieldType.Name;
     FieldSummary = "No Summary";
   }

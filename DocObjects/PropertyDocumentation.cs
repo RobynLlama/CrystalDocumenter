@@ -62,7 +62,7 @@ public class PropertyDocumentation
 
     SetterAccessibility = setMethod is not null ? Utils.GetAccessibility(setMethod) : "READONLY";
 
-    PropertyName = prop.Name ?? "Unknown";
+    PropertyName = Strategy.DefaultNamingStrategy(prop);
     PropertyType = prop.PropertyType.Name;
     PropertySummary = "No Summary";
   }

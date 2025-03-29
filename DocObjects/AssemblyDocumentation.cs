@@ -69,12 +69,12 @@ public class AssemblyDocumentation
 
       //Don't write nested classes in the index right now
       if (thing.NestedIn is null)
-        index.WriteLine($"- [{thing.Name}](./intermediary/{thing.InfoHash}.json)");
+        index.WriteLine($"- [{thing.Name}](./intermediary/{thing.FullName}.json)");
     }
 
     foreach (var item in TypeInfos)
     {
-      FileInfo output = new(Path.Combine(intermediary.FullName, $"{item.Key}.json"));
+      FileInfo output = new(Path.Combine(intermediary.FullName, $"{item.Value.FullName}.json"));
 
       if (output.Exists)
       {
@@ -120,7 +120,7 @@ public class AssemblyDocumentation
 
     foreach (var doc in TypeInfos)
     {
-      var location = Path.Combine(output.FullName, $"{doc.Key}.html");
+      var location = Path.Combine(output.FullName, $"{doc.Value.FullName}.html");
       using TextWriter writer = new StreamWriter(location);
       StringBuilder data = new(Utils.DefaultHeader);
 
@@ -131,7 +131,7 @@ public class AssemblyDocumentation
       //Only write top level classes to the index
       if (doc.Value.NestedIn is null)
       {
-        index.AppendLine($"- [{doc.Value.Name}](./pages/{doc.Value.InfoHash}.html)");
+        index.AppendLine($"- [{doc.Value.Name}](./pages/{doc.Value.FullName}.html)");
       }
     }
 

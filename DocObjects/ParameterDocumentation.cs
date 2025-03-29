@@ -24,7 +24,7 @@ public class ParameterDocumentation
 
   public ParameterDocumentation(ParameterInfo param)
   {
-    ParameterName = param.Name ?? "Unknown";
+    ParameterName = Strategy.DefaultNamingStrategy(param);
     ParameterType = param.ParameterType.Name;
     ParameterSummary = "No Summary";
   }

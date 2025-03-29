@@ -85,21 +85,21 @@ public class TypeDocumentation
     Origin = origin;
     Name = thisType.Name;
     Namespace = thisType.Namespace ?? "None";
-    FullName = Utils.GetTypeNameForHashing(thisType);
+    FullName = Strategy.DefaultNamingStrategy(thisType);
     InfoHash = Utils.HashType(thisType);
     DescribedType = thisType;
 
     if (thisType.BaseType is Type parent)
     {
       var p = Origin.GetOrAddType(parent);
-      Parent = new(p.Name, p.InfoHash);
+      Parent = new(p.Name, p.FullName);
     }
 
     if (thisType.IsNested && thisType.DeclaringType is not null)
     {
       var nested = Origin.GetOrAddType(thisType.DeclaringType);
-      NestedIn = new(nested.Name, nested.InfoHash);
-      nested.NestedTypes.Add(new(Name, InfoHash));
+      NestedIn = new(nested.Name, nested.FullName);
+      nested.NestedTypes.Add(new(Name, FullName));
     }
 
     //Record methods
@@ -121,7 +121,7 @@ public class TypeDocumentation
 
     //Record interfaces
     foreach (var inters in DescribedType.GetInterfaces())
-      Implements.Add(new(inters.Name, Utils.SHA256HashString(Utils.GetTypeNameForHashing(inters))));
+      Implements.Add(new(inters.Name, Strategy.DefaultNamingStrategy(inters)));
   }
 
   public void Save(StringBuilder data)
@@ -132,17 +132,17 @@ public class TypeDocumentation
     data.AppendLine($"- **Summary**: {TypeSummary}");
 
     if (NestedIn is not null)
-      data.AppendLine($"- **Nested In**: [{NestedIn.GetEscapedName()}]({NestedIn.Hash}.html)");
+      data.AppendLine($"- **Nested In**: [{Strategy.GetEscapedDisplayOnlyName(NestedIn.Name)}]({NestedIn.FullName}.html)");
 
     if (Parent is not null)
-      data.AppendLine($"- **Parent**: {Parent.GetEscapedName()}");
+      data.AppendLine($"- **Parent**: {Strategy.GetEscapedDisplayOnlyName(Parent.Name)}");
 
     if (NestedTypes.Count > 0)
     {
       data.AppendLine("- **Nested Types**:");
       foreach (var nest in NestedTypes)
       {
-        data.AppendLine($"  - [{nest.GetEscapedName()}]({nest.Hash}.html)");
+        data.AppendLine($"  - [{Strategy.GetEscapedDisplayOnlyName(nest.Name)}]({nest.FullName}.html)");
       }
     }
 
@@ -150,7 +150,7 @@ public class TypeDocumentation
     {
       data.AppendLine("- **Implements**:");
       foreach (var item in Implements)
-        data.AppendLine($"  - {item.GetEscapedName()}");
+        data.AppendLine($"  - {Strategy.GetEscapedDisplayOnlyName(item.Name)}");
     }
 
     if (Fields.Count > 0)
