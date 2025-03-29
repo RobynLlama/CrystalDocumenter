@@ -19,6 +19,11 @@ public static partial class Utils
       white-space: pre-wrap;
       word-break: break-word;
       }
+      .markdown-body li p
+      {
+        margin-top: 0;
+        margin-bottom: 4px;
+      }
     </style>
   </head>
   <body>
