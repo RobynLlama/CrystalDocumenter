@@ -7,12 +7,23 @@ using System.Text;
 using System.Text.Json;
 using CrystalDocumenter.Utilities;
 using Markdig;
+using Markdig.Extensions.AutoIdentifiers;
 
 namespace CrystalDocumenter.DocObjects;
 
 public class AssemblyDocumentation
 {
   public readonly Assembly Origin;
+  public static readonly MarkdownPipeline pipeline;
+
+  static AssemblyDocumentation()
+  {
+    pipeline = new MarkdownPipelineBuilder()
+    .UseAdvancedExtensions()
+    .UseAutoIdentifiers(AutoIdentifierOptions.GitHub)
+    .Build();
+  }
+
   protected readonly Dictionary<string, TypeDocumentation> TypeInfos = [];
   public TypeDocumentation GetOrAddType(Type thisType)
   {
@@ -126,7 +137,7 @@ public class AssemblyDocumentation
 
       doc.Value.Save(data);
       data.Append(Utils.DefaultFooter);
-      Markdown.ToHtml(data.ToString(), writer);
+      Markdown.ToHtml(data.ToString(), writer, pipeline: pipeline);
 
       //Only write top level classes to the index
       if (doc.Value.NestedIn is null)
@@ -136,6 +147,6 @@ public class AssemblyDocumentation
     }
 
     index.Append(Utils.DefaultFooter);
-    Markdown.ToHtml(index.ToString(), indexFile);
+    Markdown.ToHtml(index.ToString(), indexFile, pipeline: pipeline);
   }
 }
