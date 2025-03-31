@@ -28,7 +28,7 @@ public static partial class Strategy
     return name.Replace("<", "_u002B_").Replace(">", "_u003C_");
   }
 
-  public static string DefaultNamingStrategy(Type thisType) => DefaultMemberNamingStrategy(Utils.GetTypeNameForHashing(thisType));
+  public static string DefaultNamingStrategy(Type thisType) => DefaultMemberNamingStrategy(thisType.Name);
   public static string DefaultNamingStrategy(PropertyInfo info) => DefaultMemberNamingStrategy(info.Name);
   public static string DefaultNamingStrategy(FieldInfo info) => DefaultMemberNamingStrategy(info.Name);
   public static string DefaultNamingStrategy(MethodInfo info) => DefaultMemberNamingStrategy(info.Name);
