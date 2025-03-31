@@ -85,7 +85,7 @@ public class TypeDocumentation
     Origin = origin;
     Name = thisType.Name;
     Namespace = thisType.Namespace ?? string.Empty;
-    FullName = Strategy.DefaultNamingStrategy(thisType);
+    FullName = GetFullyQualifiedName(thisType);
     InfoHash = Utils.HashType(thisType);
     DescribedType = thisType;
 
@@ -104,7 +104,36 @@ public class TypeDocumentation
       }
     }
 
-    
+    string GetFullyQualifiedName(Type type)
+    {
+      Type? DeclaringType = type.DeclaringType;
+      string? typeName = string.Empty;
+      char divider = ':';
+
+      while (DeclaringType is not null)
+      {
+        if (typeName == string.Empty)
+        {
+          //we're the first level of type so only add our name
+          //to the list
+          typeName = DeclaringType.FullName;
+        }
+        else
+          typeName = $"{DeclaringType.FullName}{divider}{typeName}";
+
+        //set the divider for the next item to consume
+        divider = DeclaringType.IsNested ? '+' : '.';
+        //set the next item
+        DeclaringType = DeclaringType.DeclaringType;
+      }
+
+      var fn = Strategy.DefaultNamingStrategy(type);
+
+      if (typeName == string.Empty)
+        return fn;
+
+      return type.IsNested ? $"{typeName}+{fn}" : $"{typeName}.{fn}";
+    }
 
     //Record methods
     foreach (MethodInfo method in DescribedType.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static))
