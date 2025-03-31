@@ -11,6 +11,13 @@ partial class DocumenterProgram
   {
     HandleArguments(args);
 
+    if (InputFile == string.Empty)
+    {
+      Console.WriteLine("No input provided!");
+      Usage();
+      return;
+    }
+
     // Load your assembly here
     FileInfo assemblyPath = new(InputFile);
     DirectoryInfo outputDirInfo = new(OutputDir);
