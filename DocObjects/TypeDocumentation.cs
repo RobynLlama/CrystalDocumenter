@@ -26,10 +26,10 @@ public class TypeDocumentation
   public string FullName;
 
   [JsonInclude]
-  public string Namespace = "None";
+  public string Namespace = string.Empty;
 
   [JsonInclude]
-  public string TypeSummary = "No Summary";
+  public string TypeSummary = string.Empty;
 
   [JsonInclude]
   public string InfoHash;
@@ -84,7 +84,7 @@ public class TypeDocumentation
   {
     Origin = origin;
     Name = thisType.Name;
-    Namespace = thisType.Namespace ?? "None";
+    Namespace = thisType.Namespace ?? string.Empty;
     FullName = Strategy.DefaultNamingStrategy(thisType);
     InfoHash = Utils.HashType(thisType);
     DescribedType = thisType;

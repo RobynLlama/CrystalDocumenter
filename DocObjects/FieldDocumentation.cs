@@ -44,7 +44,7 @@ public class FieldDocumentation
     IsStatic = field.IsStatic;
     FieldName = Strategy.DefaultNamingStrategy(field);
     FieldType = field.FieldType.Name;
-    FieldSummary = "No Summary";
+    FieldSummary = string.Empty;
   }
 
   public void Save(StringBuilder data)

@@ -25,7 +25,7 @@ public class ParameterDocumentation
   public ParameterDocumentation(ParameterInfo param)
   {
     ParameterName = Strategy.DefaultNamingStrategy(param);
-    ParameterType = param.ParameterType.Name;
-    ParameterSummary = "No Summary";
+    ParameterType = param.ParameterType.FullName ?? param.ParameterType.Name;
+    ParameterSummary = string.Empty;
   }
 }

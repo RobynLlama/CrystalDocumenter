@@ -64,7 +64,7 @@ public class PropertyDocumentation
 
     PropertyName = Strategy.DefaultNamingStrategy(prop);
     PropertyType = prop.PropertyType.Name;
-    PropertySummary = "No Summary";
+    PropertySummary = string.Empty;
   }
 
   public void Save(StringBuilder data)

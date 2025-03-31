@@ -42,7 +42,7 @@ public class MethodDocumentation
   {
     MethodName = Strategy.DefaultNamingStrategy(method);
     Accessibility = Utils.GetAccessibility(method);
-    MethodSummary = "No Summary";
+    MethodSummary = string.Empty;
     IsStatic = method.IsStatic;
     ReturnType = method.ReturnType.Name;
 
