@@ -5,6 +5,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Text.Json;
+using System.Xml;
 using CrystalDocumenter.Utilities;
 using Markdig;
 using Markdig.Extensions.AutoIdentifiers;
@@ -153,5 +154,28 @@ public class AssemblyDocumentation
 
     index.Append(Utils.DefaultFooter);
     Markdown.ToHtml(index.ToString(), indexFile, pipeline: pipeline);
+  }
+
+  public void BuildXMLDoc(string output = "Documentation")
+  {
+    FileInfo file = new(Path.Combine(output, $"{Origin.GetName().Name}.xml"));
+    using XmlWriter xml = XmlWriter.Create(file.FullName, new() { Indent = true });
+
+    //setup the header and junk
+    xml.WriteStartDocument();
+    xml.WriteStartElement("doc");
+
+    xml.WriteStartElement("assembly");
+    xml.WriteElementString("name", Origin.GetName().Name);
+    xml.WriteEndElement();
+
+    xml.WriteStartElement("members");
+
+    foreach (var type in TypeInfos.Values)
+      type.ToXMLElement(xml);
+
+    xml.WriteEndElement();
+    xml.WriteEndElement();
+    xml.WriteEndDocument();
   }
 }

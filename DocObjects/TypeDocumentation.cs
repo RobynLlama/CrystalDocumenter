@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
+using System.Xml;
 using CrystalDocumenter.DocObjects;
 using CrystalDocumenter.Utilities;
 
@@ -215,6 +216,77 @@ public class TypeDocumentation
         item.Save(data);
     }
 
+  }
+
+  public void ToXMLElement(XmlWriter xml)
+  {
+    //Check if this type is documented at all
+    if (string.IsNullOrEmpty(TypeSummary))
+      return;
+
+    //write the type element
+    xml.WriteStartElement("member");
+    xml.WriteAttributeString("name", $"T:{FullName}");
+    xml.WriteElementString("summary", TypeSummary);
+    xml.WriteEndElement();
+
+    //write fields
+    foreach (var field in Fields)
+    {
+
+      if (string.IsNullOrEmpty(field.FieldSummary))
+        continue;
+
+      xml.WriteStartElement("member");
+      xml.WriteAttributeString("name", $"F:{FullName}.{field.FieldName}");
+      xml.WriteElementString("summary", field.FieldSummary);
+      xml.WriteEndElement();
+    }
+
+    //write props
+    foreach (var prop in Properties)
+    {
+
+      if (string.IsNullOrEmpty(prop.PropertySummary))
+        continue;
+
+      xml.WriteStartElement("member");
+      xml.WriteAttributeString("name", $"P:{FullName}.{prop.PropertyName}");
+      xml.WriteElementString("summary", prop.PropertySummary);
+      xml.WriteEndElement();
+    }
+
+    //write methods
+    foreach (var method in MethodSignatures)
+    {
+
+      if (string.IsNullOrEmpty(method.MethodSummary))
+        continue;
+
+      string? paramString = null;
+
+      foreach (var param in method.Parameters)
+        if (paramString is null)
+          paramString = param.ParameterType;
+        else
+          paramString = $"{paramString},{param.ParameterType}";
+
+      if (paramString is not null)
+        paramString = $"({paramString})";
+
+      xml.WriteStartElement("member");
+      xml.WriteAttributeString("name", $"M:{FullName}.{method.MethodName}{paramString}");
+      xml.WriteElementString("summary", method.MethodSummary);
+
+      foreach (var param in method.Parameters)
+      {
+        xml.WriteStartElement("param");
+        xml.WriteAttributeString("name", param.ParameterName);
+        xml.WriteString(param.ParameterSummary);
+        xml.WriteEndElement();
+      }
+      xml.WriteEndElement();
+    }
   }
 
   private bool ShouldRecordMethod(MethodInfo method)

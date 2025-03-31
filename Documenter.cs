@@ -29,6 +29,7 @@ partial class DocumenterProgram
 
     doc.CreateDocumentationSources(OutputDir);
     doc.BuildDocumentationPages(OutputDir);
+    doc.BuildXMLDoc(OutputDir);
   }
 
 }
