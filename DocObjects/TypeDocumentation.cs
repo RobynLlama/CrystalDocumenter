@@ -91,16 +91,20 @@ public class TypeDocumentation
 
     if (thisType.BaseType is Type parent)
     {
-      var p = Origin.GetOrAddType(parent);
-      Parent = new(p.Name, p.FullName);
+      if (Origin.GetOrAddType(parent) is TypeDocumentation p)
+        Parent = new(p.Name, p.FullName);
     }
 
     if (thisType.IsNested && thisType.DeclaringType is not null)
     {
-      var nested = Origin.GetOrAddType(thisType.DeclaringType);
-      NestedIn = new(nested.Name, nested.FullName);
-      nested.NestedTypes.Add(new(Name, FullName));
+      if (Origin.GetOrAddType(thisType.DeclaringType) is TypeDocumentation nested)
+      {
+        NestedIn = new(nested.Name, nested.FullName);
+        nested.NestedTypes.Add(new(Name, FullName));
+      }
     }
+
+    
 
     //Record methods
     foreach (MethodInfo method in DescribedType.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static))

@@ -25,8 +25,11 @@ public class AssemblyDocumentation
   }
 
   protected readonly Dictionary<string, TypeDocumentation> TypeInfos = [];
-  public TypeDocumentation GetOrAddType(Type thisType)
+  public TypeDocumentation? GetOrAddType(Type thisType)
   {
+    if (thisType.Assembly != Origin)
+      return null;
+
     if (TypeInfos.TryGetValue(Utils.HashType(thisType), out var info))
       return info;
 
@@ -75,7 +78,9 @@ public class AssemblyDocumentation
 
     foreach (Type type in Origin.GetTypes())
     {
-      var thing = GetOrAddType(type);
+      if (GetOrAddType(type) is not TypeDocumentation thing)
+        continue;
+
       Console.WriteLine($"Added: {thing.Name}");
 
       //Don't write nested classes in the index right now
