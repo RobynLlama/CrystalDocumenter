@@ -9,6 +9,7 @@ Copyright (C) 2025 Robyn (robyn@mamallama.dev)
 
 using System;
 using System.Collections.Generic;
+using CrystalDocumenter.Utilities;
 
 namespace CrystalDocumenter;
 
@@ -34,6 +35,7 @@ partial class DocumenterProgram
     WriteSwitchInfo("-i, --input", "set the input file path");
     WriteSwitchInfo("-o, --output", "set the output directory, default: Documentation");
     WriteSwitchInfo("-l, --license", "display this software's license notice");
+    WriteSwitchInfo("-q, --quiet", "don't output any build info");
   }
   internal static void HandleArguments(in string[] args)
   {
@@ -45,6 +47,10 @@ partial class DocumenterProgram
 
       switch (current)
       {
+        case "--quiet":
+        case "-q":
+          Utils.BasicLogger.BeQuiet();
+          break;
         case "--license":
         case "-l":
           Console.WriteLine(LICENSE);
