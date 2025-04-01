@@ -36,14 +36,20 @@ public class MethodDocumentation
   public List<ParameterDocumentation> Parameters = [];
 
   [JsonConstructor]
-  public MethodDocumentation(string Accessibility, string MethodName, string MethodSummary, bool IsStatic, string ReturnType, List<ParameterDocumentation> Parameters)
+  public MethodDocumentation(
+    string accessibility,
+    string methodName,
+    string methodSummary,
+    bool isStatic,
+    string returnType,
+    List<ParameterDocumentation> parameters)
   {
-    this.Accessibility = Accessibility;
-    this.MethodName = MethodName;
-    this.MethodSummary = MethodSummary;
-    this.IsStatic = IsStatic;
-    this.ReturnType = ReturnType;
-    this.Parameters = Parameters;
+    Accessibility = accessibility;
+    MethodName = methodName;
+    MethodSummary = methodSummary;
+    IsStatic = isStatic;
+    ReturnType = returnType;
+    Parameters = parameters;
   }
 
   public MethodDocumentation(MethodInfo method)

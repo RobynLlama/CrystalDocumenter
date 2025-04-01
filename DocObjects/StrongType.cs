@@ -12,11 +12,11 @@ using System.Text.Json.Serialization;
 namespace CrystalDocumenter.DocObjects;
 
 [method: JsonConstructor]
-public class StrongType(string Name, string FullName)
+public class StrongType(string name, string fullName)
 {
   [JsonInclude]
-  public string Name = Name;
+  public string Name = name;
 
   [JsonInclude]
-  public string FullName = FullName;
+  public string FullName = fullName;
 }

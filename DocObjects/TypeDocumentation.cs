@@ -35,7 +35,7 @@ public class TypeDocumentation
   public string FullName;
 
   [JsonInclude]
-  public string Namespace = string.Empty;
+  public string TypeNamespace = string.Empty;
 
   [JsonInclude]
   public string TypeSummary = string.Empty;
@@ -67,7 +67,7 @@ public class TypeDocumentation
     string name,
     string fullName,
     string infoHash,
-    string Namespace,
+    string typeNamespace,
     string typeSummary,
     List<MethodDocumentation> methodSignatures,
     List<PropertyDocumentation> properties,
@@ -78,7 +78,7 @@ public class TypeDocumentation
     Parent = parent;
     NestedIn = nestedIn;
     Name = name;
-    this.Namespace = Namespace;
+    TypeNamespace = typeNamespace;
     FullName = fullName;
     InfoHash = infoHash;
     TypeSummary = typeSummary;
@@ -93,7 +93,7 @@ public class TypeDocumentation
   {
     Origin = origin;
     Name = thisType.Name;
-    Namespace = thisType.Namespace ?? string.Empty;
+    TypeNamespace = thisType.Namespace ?? string.Empty;
     FullName = GetFullyQualifiedName(thisType);
     InfoHash = Utils.HashType(thisType);
     DescribedType = thisType;
@@ -177,7 +177,7 @@ public class TypeDocumentation
     data.AppendLine($"- [Methods](#methods)");
 
     data.AppendLine("## Member Info");
-    data.AppendLine($"- **Namespace**: {Namespace}");
+    data.AppendLine($"- **Namespace**: {TypeNamespace}");
     data.AppendLine($"- **FullName**: {FullName}");
     data.AppendLine($"- **Summary**: {TypeSummary}");
 

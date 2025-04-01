@@ -24,11 +24,14 @@ public class ParameterDocumentation
   public string ParameterSummary;
 
   [JsonConstructor]
-  public ParameterDocumentation(string ParameterName, string ParameterType, string ParameterSummary)
+  public ParameterDocumentation(
+    string parameterName,
+    string parameterType,
+    string parameterSummary)
   {
-    this.ParameterName = ParameterName;
-    this.ParameterType = ParameterType;
-    this.ParameterSummary = ParameterSummary;
+    ParameterName = parameterName;
+    ParameterType = parameterType;
+    ParameterSummary = parameterSummary;
   }
 
   public ParameterDocumentation(ParameterInfo param)
