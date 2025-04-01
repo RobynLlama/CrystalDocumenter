@@ -163,7 +163,7 @@ public class AssemblyDocumentation
       data.Append(Utils.DefaultFooter);
       Markdown.ToHtml(data.ToString(), writer, pipeline: Pipeline);
 
-      Utils.BasicLogger.LogSuccess("Wrote Page", location, 1);
+      Utils.BasicLogger.LogSuccess("Wrote Page", $"{output.Name}{Path.DirectorySeparatorChar}{doc.Value.FullName}.html", 1);
 
       //Only write top level classes to the index
       if (doc.Value.NestedIn is null)
