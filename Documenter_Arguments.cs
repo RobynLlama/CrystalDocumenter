@@ -33,6 +33,7 @@ partial class DocumenterProgram
     WriteSwitchInfo("-h, --help", "Show this screen");
     WriteSwitchInfo("-i, --input", "set the input file path");
     WriteSwitchInfo("-o, --output", "set the output directory, default: Documentation");
+    WriteSwitchInfo("-l, --license", "display this software's license notice");
   }
   internal static void HandleArguments(in string[] args)
   {
@@ -44,6 +45,11 @@ partial class DocumenterProgram
 
       switch (current)
       {
+        case "--license":
+        case "-l":
+          Console.WriteLine(LICENSE);
+          Environment.Exit(0);
+          break;
         case "--help":
         case "-h":
           Usage();

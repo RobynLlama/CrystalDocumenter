@@ -39,6 +39,8 @@ partial class DocumenterProgram
       return;
     }
 
+    Console.WriteLine(LICENSE);
+
     // Load your assembly here
     FileInfo assemblyPath = new(InputFile);
     DirectoryInfo outputDirInfo = new(OutputDir);
