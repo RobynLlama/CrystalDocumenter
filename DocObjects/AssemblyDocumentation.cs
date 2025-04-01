@@ -86,17 +86,21 @@ public class AssemblyDocumentation
 
     var options = new JsonSerializerOptions() { WriteIndented = true };
 
+    Console.WriteLine("-- Documenting Types --");
+
     foreach (Type type in Origin.GetTypes())
     {
       if (GetOrAddType(type) is not TypeDocumentation thing)
         continue;
 
-      Console.WriteLine($"Added: {thing.Name}");
+      Utils.BasicLogger.LogInfo("Found", thing.Name, 1);
 
       //Don't write nested classes in the index right now
       if (thing.NestedIn is null)
         index.WriteLine($"- [{thing.Name}](./intermediary/{thing.FullName}.json)");
     }
+
+    Console.WriteLine("-- Generating Intermediary Media --");
 
     foreach (var item in TypeInfos)
     {
@@ -104,9 +108,11 @@ public class AssemblyDocumentation
 
       if (output.Exists)
       {
-        Console.WriteLine($"Skipping output for {item.Value.Name}");
+        Utils.BasicLogger.LogInfo("Skipping", item.Value.Name, 1);
         continue;
       }
+
+      Utils.BasicLogger.LogSuccess("Writing", output.Name, 1);
 
       using StreamWriter writer = new(output.FullName);
       writer.Write(JsonSerializer.Serialize(item.Value, options));
@@ -127,6 +133,8 @@ public class AssemblyDocumentation
 
     var files = input.GetFiles("*.json");
 
+    Console.WriteLine("-- Building Static Pages --");
+
     foreach (var file in files)
     {
       using StreamReader reader = new(file.FullName);
@@ -135,6 +143,7 @@ public class AssemblyDocumentation
       if (JsonSerializer.Deserialize<TypeDocumentation>(jsonText) is not TypeDocumentation item)
         throw new Exception($"Unable to deserialize a TypeDocumentation from {file.FullName}");
 
+      Utils.BasicLogger.LogInfo("Reading", item.Name, 1);
       TypeInfos[item.InfoHash] = item;
     }
 
@@ -154,6 +163,8 @@ public class AssemblyDocumentation
       data.Append(Utils.DefaultFooter);
       Markdown.ToHtml(data.ToString(), writer, pipeline: Pipeline);
 
+      Utils.BasicLogger.LogSuccess("Wrote Page", location, 1);
+
       //Only write top level classes to the index
       if (doc.Value.NestedIn is null)
       {
@@ -163,6 +174,8 @@ public class AssemblyDocumentation
 
     index.Append(Utils.DefaultFooter);
     Markdown.ToHtml(index.ToString(), indexFile, pipeline: Pipeline);
+
+    Utils.BasicLogger.LogSuccess("Wrote Page", "Index.html", 1);
   }
 
   public void BuildXMLDoc(string output = "Documentation")
@@ -180,8 +193,13 @@ public class AssemblyDocumentation
 
     xml.WriteStartElement("members");
 
+    Console.WriteLine("-- Writing XMLDoc --");
+
     foreach (var type in TypeInfos.Values)
+    {
       type.ToXMLElement(xml);
+      Utils.BasicLogger.LogSuccess("Wrote Member", type.Name, 1);
+    }
 
     xml.WriteEndElement();
     xml.WriteEndElement();
